@@ -13,6 +13,10 @@ public class CarService {
 
     public Car getCarDetails(String name) {
         Car car = carRepository.findCarByName(name);
-        return car;
+        if( car != null ){
+            return car;
+        }else{
+            throw new CarNotFoundException();
+        }
     }
 }

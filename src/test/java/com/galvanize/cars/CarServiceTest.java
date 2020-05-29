@@ -7,7 +7,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,5 +34,15 @@ class CarServiceTest {
         Car car = carService.getCarDetails("prius");
         assertThat(car.getName()).isEqualTo("prius");
         assertThat(car.getType()).isEqualTo("hybrid");
+    }
+
+    @Test
+    void getCarDetails_exists_throwException() {
+        when(carRepository.findCarByName(anyString()))
+                .thenReturn(null);
+
+        assertThatThrownBy(
+                () -> carService.getCarDetails("nothing")
+        ).isInstanceOf(CarNotFoundException.class);
     }
 }
